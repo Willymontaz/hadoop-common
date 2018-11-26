@@ -34,8 +34,12 @@ public class ResourceInfo {
   }
 
   public ResourceInfo(Resource res) {
-    memory = res.getMemory();
-    vCores = res.getVirtualCores();
+    this(res.getMemory(), res.getVirtualCores());
+  }
+
+  public ResourceInfo(int memory, int vCores) {
+    this.memory = memory;
+    this.vCores = vCores;
   }
 
   public int getMemory() {

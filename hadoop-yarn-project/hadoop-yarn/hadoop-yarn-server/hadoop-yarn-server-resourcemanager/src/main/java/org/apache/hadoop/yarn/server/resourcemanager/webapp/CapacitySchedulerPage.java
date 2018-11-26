@@ -27,10 +27,7 @@ import org.apache.hadoop.yarn.server.resourcemanager.ResourceManager;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CSQueue;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler;
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.UserInfo;
-import org.apache.hadoop.yarn.server.resourcemanager.webapp.dao.CapacitySchedulerInfo;
-import org.apache.hadoop.yarn.server.resourcemanager.webapp.dao.CapacitySchedulerLeafQueueInfo;
-import org.apache.hadoop.yarn.server.resourcemanager.webapp.dao.CapacitySchedulerQueueInfo;
-import org.apache.hadoop.yarn.server.resourcemanager.webapp.dao.ResourceInfo;
+import org.apache.hadoop.yarn.server.resourcemanager.webapp.dao.*;
 import org.apache.hadoop.yarn.webapp.ResponseInfo;
 import org.apache.hadoop.yarn.webapp.SubView;
 import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
@@ -92,11 +89,11 @@ class CapacitySchedulerPage extends RmView {
     @Override
     protected void render(Block html) {
       StringBuilder activeUserList = new StringBuilder("");
-      ResourceInfo usedResources = lqinfo.getResourcesUsed();
+      ResourceInfoWithRatio usedResources = lqinfo.getResourcesUsed();
       ArrayList<UserInfo> users = lqinfo.getUsers().getUsersList();
       for (UserInfo entry: users) {
         activeUserList.append(entry.getUsername()).append(" &lt;")
-          .append(getPercentage(entry.getResourcesUsed(), usedResources))
+          .append(getPercentage(entry.getResourcesUsed(), new ResourceInfo(usedResources.getMemory(), usedResources.getvCores())))
           .append(", Schedulable Apps: " + entry.getNumActiveApplications())
           .append(", Non-Schedulable Apps: " + entry.getNumPendingApplications())
           .append("&gt;<br style='display:block'>"); //Force line break

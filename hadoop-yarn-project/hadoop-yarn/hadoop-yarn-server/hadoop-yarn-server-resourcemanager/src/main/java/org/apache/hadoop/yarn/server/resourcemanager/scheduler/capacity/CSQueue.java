@@ -142,7 +142,11 @@ extends org.apache.hadoop.yarn.server.resourcemanager.scheduler.Queue {
    * @return used resources by the queue and it's children
    */
   public Resource getUsedResources();
-  
+
+
+  public float getUsedMemoryRatio();
+  public float getUsedVirtualCoresRatio();
+
   /**
    * Get the currently utilized resources which allocated at nodes with label
    * specified

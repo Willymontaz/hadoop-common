@@ -52,7 +52,7 @@ public class CapacitySchedulerQueueInfo {
   protected String queueName;
   protected QueueState state;
   protected CapacitySchedulerQueueInfoList queues;
-  protected ResourceInfo resourcesUsed;
+  protected ResourceInfoWithRatio resourcesUsed;
   private boolean hideReservationQueues = false;
   protected ArrayList<String> nodeLabels = new ArrayList<String>();
   protected long allocatedContainers;
@@ -81,7 +81,7 @@ public class CapacitySchedulerQueueInfo {
     reservedContainers = q.getMetrics().getReservedContainers();
     queueName = q.getQueueName();
     state = q.getState();
-    resourcesUsed = new ResourceInfo(q.getUsedResources());
+    resourcesUsed = new ResourceInfoWithRatio(q.getUsedResources(), q.getUsedMemoryRatio(), q.getUsedVirtualCoresRatio());
     if(q instanceof PlanQueue &&
        !((PlanQueue)q).showReservationsAsQueues()) {
       hideReservationQueues = true;
@@ -154,7 +154,7 @@ public class CapacitySchedulerQueueInfo {
     return this.queues;
   }
 
-  public ResourceInfo getResourcesUsed() {
+  public ResourceInfoWithRatio getResourcesUsed() {
     return resourcesUsed;
   }
 

@@ -67,6 +67,7 @@ public abstract class AbstractCSQueue implements CSQueue {
   final QueueMetrics metrics;
   protected final PrivilegedEntity queueEntity;
 
+  final CapacitySchedulerContext cs;
   final ResourceCalculator resourceCalculator;
   Set<String> accessibleLabels;
   RMNodeLabelsManager labelManager;
@@ -88,6 +89,8 @@ public abstract class AbstractCSQueue implements CSQueue {
 
   public AbstractCSQueue(CapacitySchedulerContext cs, 
       String queueName, CSQueue parent, CSQueue old) throws IOException {
+    this.cs = cs;
+
     this.minimumAllocation = cs.getMinimumResourceCapability();
     this.maximumAllocation = cs.getMaximumResourceCapability();
     this.labelManager = cs.getRMContext().getNodeLabelManager();
@@ -167,6 +170,16 @@ public abstract class AbstractCSQueue implements CSQueue {
   @Override
   public synchronized Resource getUsedResources() {
     return usedResources;
+  }
+
+  @Override
+  public synchronized float getUsedMemoryRatio() {
+    return this.usedResources.getMemory() / (cs.getClusterResource().getMemory() * this.capacity);
+  }
+
+  @Override
+  public synchronized float getUsedVirtualCoresRatio() {
+    return this.usedResources.getVirtualCores() / (cs.getClusterResource().getVirtualCores() * this.capacity);
   }
 
   public synchronized int getNumContainers() {
